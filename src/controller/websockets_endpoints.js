@@ -1,4 +1,4 @@
-import * as endpoints_conections from './websockets_connections.js';
+import * as endpoints_conections from './websockets_connections_bitfinex.js';
 
 export function retrieve_bid (pair_name, base_wss) {
 	return new Promise (function(res, rej) {
