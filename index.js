@@ -20,7 +20,7 @@ app.listen(port, () => {
 
 //This function isn't part of the challenge,
 // I use it just for know the traiding pairs
-app.get('/getpairs/', (req,res) =>{ 
+app.get('/pairs', (req,res) =>{ 
     endpoints_function.list_pair(base_URL)
     .then(response => {
       const data=response;
@@ -34,7 +34,7 @@ app.get('/getpairs/', (req,res) =>{
 
 
 /**Endpoint1, example pair_name='tBTCUSD'**/
-app.get('/end1/:pair_name', (req,res) => {
+app.get('/pair/:pair_name/end1', (req,res) => {
   endpoints_function.retrieve_bid(req.params.pair_name,base_wss)
   .then(response => {
     const best_bid=response[0];
@@ -53,7 +53,7 @@ app.get('/end1/:pair_name', (req,res) => {
 
 
 /** Endpoint2, example pair_name='tBTCUSD'**/
-app.get('/end2/:pair_name/:operation/:amount/:limit_price', (req,res) => {
+app.get('/pair/:pair_name/:operation/:amount/:limit_price/end2', (req,res) => {
   const pair_name=req.params.pair_name;
   const amount =req.params.amount;
   const limit_price=req.params.limit_price;
