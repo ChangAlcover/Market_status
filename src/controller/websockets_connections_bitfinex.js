@@ -1,6 +1,5 @@
 import axios from 'axios';
-import  ws from 'ws';
-
+import ws from 'ws';
 
 export function retrieve_ticker(pair_name,base_wss) {
 
@@ -25,6 +24,7 @@ export function retrieve_ticker(pair_name,base_wss) {
 	});
 }
 
+
 export function retrieve_book(pair_name,depth,base_wss) {
 
 	return new Promise (function(res, rej) {
@@ -43,6 +43,14 @@ export function retrieve_book(pair_name,depth,base_wss) {
 			const bid_data=[];
 			const ask_data=[];
 			var data=JSON.parse(msg.toString());
+
+			/** The information from Bitfinex comes with a tag in data[0]
+			 * 	The information needed to calculate the effective price is 
+			 * 	labeled with the NUMBER of the connection channel.
+			 *  If the order takes a long time, it has the label 'hb' and there is no information
+			 * 	Finally, sometimes Bitfinex sends updates of the information with the snapchat of the current situation,
+			 * 	it is necessary to delete all updates, which can be recognized because it doesn't have the required depth **/
+
 			if (typeof data[0]==='number' && data[1]!=='hb' && data[1].length==depth*2){
 				data=data[1];
 				ws_server.close();
@@ -62,9 +70,9 @@ export function retrieve_book(pair_name,depth,base_wss) {
 }
 
 
-//acces to Configs Params
-//This function isn't part of the challenge,
-// I use it just for know the traiding pairs
+/** Access to Configs Params
+ * This function isn't part of the challenge,
+ * I use it just to know the trading pairs **/
 export function obtain_configs (base_URL,config_params) {
 	
 	return new Promise (function(res, rej) {
