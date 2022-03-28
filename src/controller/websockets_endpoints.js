@@ -6,7 +6,7 @@ export function retrieve_bid (pair_name, base_wss) {
 		endpoints_conections.retrieve_ticker(pair_name,base_wss)
 		.then(response => {
 			const data=response;
-			res([data[1],data[2],data[3],data[4]]);
+			res([data[0],data[1],data[2],data[3]]);
 		})
 		.catch(err => {
 			console.log("Error in function retrieve_bid");
