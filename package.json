@@ -5,19 +5,24 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "jest",
+    "test": "mocha --reporter spec",
     "start": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.26.1",
+    "chai": "^4.3.6",
     "express": "^4.17.3",
+    "jest": "^27.5.1",
+    "mocha": "^9.2.2",
+    "request": "^2.88.2",
+    "supertest": "^6.2.2",
     "ws": "^8.5.0"
   },
   "devDependencies": {
     "eslint": "^8.12.0",
-    "jest-websocket-mock": "^2.3.0",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
   }
 }
