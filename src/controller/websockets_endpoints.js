@@ -1,4 +1,4 @@
-import * as endpoints_conections from './websockets_connections.js';
+import * as endpoints_conections from './websockets_connections_bitfinex.js';
 
 export function retrieve_bid (pair_name, base_wss) {
 	return new Promise (function(res, rej) {
@@ -12,6 +12,7 @@ export function retrieve_bid (pair_name, base_wss) {
 		});
 	});
 }
+
 
 export function retrieve_efect_price (pair_name,operation,amount,limit_price, base_wss,depth=25) {
 
@@ -41,6 +42,7 @@ export function efect_price_logic (operation,amount,limit_price,depth,data) {
 	if (operation==='buy')	{
 		data=data[1];	
 	}	
+
 	try{
 		for (let i = 0; i <depth; i++) {
 			if (amount-acumulate >0) {
@@ -68,6 +70,7 @@ export function efect_price_logic (operation,amount,limit_price,depth,data) {
 	}catch (err) {
 			console.log("Error efect_price_logic function");
 	}
+
 }
 
 
