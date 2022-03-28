@@ -13,8 +13,9 @@ export function retrieve_bid (pair_name, base_wss) {
 	});
 }
 
-export function retrieve_efect_price (pair_name,operation,amount,limit_price, base_wss) {
-	const depth=25;
+
+export function retrieve_efect_price (pair_name,operation,amount,limit_price, base_wss,depth=25) {
+
 	return new Promise (function(res, rej) {
 		endpoints_conections.retrieve_book(pair_name,depth,base_wss)
 		.then(response => {
@@ -42,26 +43,34 @@ export function efect_price_logic (operation,amount,limit_price,depth,data) {
 		data=data[1];	
 	}	
 
-	for (let i = 0; i <depth; i++) {
-		if (amount-acumulate >0) {
-			if (amount-acumulate > data[i][1]) {
-				acumulate_value+=data[i][0]*data[i][1];
-			}else {
-				acumulate_value+=data[i][0]*(amount-acumulate);
-			}
-			acumulate+=data[i][1];
+	try{
+		for (let i = 0; i <depth; i++) {
+			if (amount-acumulate >0) {
+				if (amount-acumulate > data[i][1]) {
+					acumulate_value+=data[i][0]*data[i][1];
+				}else {
+					acumulate_value+=data[i][0]*(amount-acumulate);
+				}
+				acumulate+=data[i][1];
+			}			
+			if (limit_price<data[i][0] && operation==='sell') {
+				amount_limit+=data[i][1];
+				amount_limit_value+=data[i][0]*data[i][1];
+				}
+			if (limit_price>data[i][0] && operation==='buy') {
+				amount_limit+=data[i][1];
+				amount_limit_value+=data[i][0]*data[i][1];
+				}
 		}
-		
-		if (limit_price<data[i][0] && operation==='sell') {
-			amount_limit+=data[i][1];
-			amount_limit_value+=data[i][0]*data[i][1];
-			}
-		if (limit_price>data[i][0] && operation==='buy') {
-			amount_limit+=data[i][1];
-			amount_limit_value+=data[i][0]*data[i][1];
-			}
+		if (amount-acumulate>0){
+			//just return a length 4 if the depth is not enough to evaluate the effective price
+			return ['Unable to calculate, a smaller amount should work',amount_limit,amount_limit_value,0];
+		}
+		return [acumulate_value,amount_limit,amount_limit_value];
+	}catch (err) {
+			console.log("Error efect_price_logic function");
 	}
-	return [acumulate_value,amount_limit,amount_limit_value];
+
 }
 
 
