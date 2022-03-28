@@ -36,7 +36,7 @@ app.get('/end1/:pair_name', (req,res) => {
   endpoints_function.retrieve_bid(req.params.pair_name,base_wss)
   .then(response => {
     const data=response;
-    res.send(`Bid for ${req.params.pair_name} in: ${data}`);
+    res.send(`Best bid for ${req.params.pair_name} in: ${data}`);
 
   })
   .catch(err => {
@@ -45,14 +45,21 @@ app.get('/end1/:pair_name', (req,res) => {
 });
 
 //Endpoint2, example pair_name='tBTCUSD'
-app.get('/end2/:pair_name', (req,res) => {
-  const amount =2;
-  const limit_price=44885;
-  endpoints_function.retrieve_efect_price(req.params.pair_name,'buy',amount,limit_price,base_wss)
+app.get('/end2/:pair_name/:operation/:amount/:limit_price', (req,res) => {
+  const pair_name=req.params.pair_name;
+  const amount =req.params.amount;
+  const limit_price=req.params.limit_price;
+  const operation=req.params.operation;
+  endpoints_function.retrieve_efect_price(pair_name,operation,amount,limit_price,base_wss)
   .then(response => {
     const data=response;
-    res.send(`<p>Effective price for ${req.params.pair_name} and an amount of ${amount} is: ${data[0]}</p>
+    res.write(`<p>Effective price for ${req.params.pair_name} and an amount of ${amount} is: ${data[0]}</p>
             <p>With a limit price of ${limit_price} the maximun order of ${req.params.pair_name} is ${data[1]} at a effective price of ${data[2]}</p>`);
+    if (data[1]===0) {
+      res.write(`<p>The limit price used isn't in the range of bid-ask</p>`);
+    }
+    res.end();
+    
   })
   .catch(err => {
     console.log("Error in function pair_name");
